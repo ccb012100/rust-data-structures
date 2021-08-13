@@ -48,6 +48,25 @@ where
             ConsList::Nil => String::from("Nil"),
         }
     }
+
+    pub fn parse_cons_list(cons: ConsList<T>) {
+        println!("{}", cons);
+
+        let mut head = car(&cons);
+        let mut cons = cdr(&cons);
+
+        while let Some(h) = head {
+            println!("head => {}", h);
+            match cons {
+                Some(t) => {
+                    println!("tail => {}\n", t);
+                    head = car(t);
+                    cons = cdr(t);
+                }
+                None => panic!("This should never come back as None."),
+            }
+        }
+    }
 }
 
 /// Format ConsList in LISP dotted pair notation

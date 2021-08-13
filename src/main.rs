@@ -1,34 +1,38 @@
-use core::panic;
-use std::fmt;
-
-use rust_data_structures::ConsList::{Cons, Nil};
-use rust_data_structures::{lists, ConsList};
+use rust_data_structures::lists::conslist::ConsList;
+use rust_data_structures::lists::linkedlist::{self, LinkedList, Node};
 
 fn main() {
-    let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
-
-    println!("*** list:\n");
-    parse_cons_list(list);
+    // TODO: move these to tests
+    linked_list();
 }
 
-fn parse_cons_list<T>(cons: ConsList<T>)
-where
-    T: fmt::Display,
-{
-    println!("{}", cons);
+fn cons_list() {
+    let cons = ConsList::Cons(
+        1,
+        Box::new(ConsList::Cons(
+            2,
+            Box::new(ConsList::Cons(3, Box::new(ConsList::Nil))),
+        )),
+    );
 
-    let mut head = lists::car(&cons);
-    let mut cons = lists::cdr(&cons);
+    println!("*** CONSLIST:\n");
+    ConsList::parse_cons_list(cons);
+}
 
-    while let Some(h) = head {
-        println!("head => {}", h);
-        match cons {
-            Some(t) => {
-                println!("tail => {}\n", t);
-                head = lists::car(t);
-                cons = lists::cdr(t);
-            }
-            None => panic!("This should never come back as None."),
-        }
-    }
+fn linked_list() {
+    let linked = LinkedList::new();
+
+    println!("*** EMPTY LINKED LIST:\n\n{:#?}", linked);
+    LinkedList::traverse(&linked);
+
+    let mut linked = LinkedList::create(100);
+    let head: &mut linkedlist::Node = linked.get_head().unwrap();
+    let node = Node::new(300);
+    head.append_after(node);
+    let node = Node::new(200);
+    head.append_after(node);
+    head.append_after(Node::new(300));
+
+    println!("List:\n\n{:#?}", linked);
+    LinkedList::traverse(&linked);
 }
