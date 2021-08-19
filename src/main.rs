@@ -22,17 +22,23 @@ fn cons_list() {
 fn linked_list() {
     let linked = LinkedList::new();
 
-    println!("*** EMPTY LINKED LIST:\n\n{:#?}", linked);
+    println!("*** EMPTY LINKED LIST:\n\n{:#?}\n", linked);
     LinkedList::traverse(&linked);
 
-    let mut linked = LinkedList::create(100);
-    let head: &mut linkedlist::Node = linked.get_head().unwrap();
-    let node = Node::new(300);
-    head.append_after(node);
-    let node = Node::new(200);
-    head.append_after(node);
-    head.append_after(Node::new(300));
+    println!("\n*** POPULATED LINKED LIST:\n\n{:#?}", linked);
 
-    println!("List:\n\n{:#?}", linked);
+    let mut linked = LinkedList::create(100); // list: 100 -> nil
+    let head: &mut linkedlist::Node = linked.get_head().unwrap();
+    let node = Node::new(200);
+
+    head.append_after(node); // list: 100 -> 200 -> nil
+
+    let node = Node::new(300);
+
+    head.append_after(node); // list: 100 -> 300 -> 200 -> nil
+    head.append_after(Node::new(400)); // list: 100 -> 400 -> 300 -> 200 -> nil
+    head.append_before(Node::new(500)); // list: 500 -> 100 -> 400 -> 300 -> 200 -> nil
+
+    println!("\nList:\n\n{:#?}\n", linked);
     LinkedList::traverse(&linked);
 }

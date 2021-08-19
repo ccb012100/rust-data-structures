@@ -33,6 +33,7 @@ impl LinkedList {
         Self { head: Link::Nil }
     }
 
+    // traverse the list
     pub fn traverse(list: &LinkedList) {
         match &list.head {
             Link::Nil => println!("Empty list!"),
@@ -40,6 +41,7 @@ impl LinkedList {
         }
     }
 
+    // Get the head node of the list
     pub fn get_head(&mut self) -> Option<&mut Node> {
         match self.head {
             Link::Nil => None,
@@ -62,6 +64,7 @@ impl Node {
         }
     }
 
+    // traverse from `node` to end of List
     pub fn traverse(node: &Node) {
         println!("Node: {}", node.data);
 
@@ -71,9 +74,21 @@ impl Node {
         }
     }
 
+    // append new Node after `self`
     pub fn append_after(&mut self, mut node: Node) {
-        // I'm sure I'm doing this wrong, but it works...
-        mem::swap(&mut self.next, &mut node.next); // move self.next into tmp
-        self.next = RefCell::new(Link::Next(Box::new(node))); // move node to self.next
+        // move self.Next value into node.Next
+        node.next = mem::replace(&mut self.next, RefCell::new(Link::Nil));
+        // set self.next to node
+        self.next = RefCell::new(Link::Next(Box::new(node)));
+    }
+
+    // append new Node before `self`
+    pub fn append_before(&mut self, node: Node) {
+        // move self into tmp
+        let tmp = mem::replace(self, Node::new(0));
+        // move new node into self
+        *self = node;
+        // set node.next to tmp
+        self.next = RefCell::new(Link::Next(Box::new(tmp)));
     }
 }
